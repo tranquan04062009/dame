@@ -2,20 +2,35 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #6a11cb;
+      --secondary-color: #2575fc;
+      --card-bg: #ffffff;
+      --text-color: #343a40;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      width: 320px;
       margin: 0;
       padding: 0;
       background-color: #f0f4f8;
-      color: #343a40;
-      position: relative;
+      color: var(--text-color);
+      min-width: 320px;
       overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    
-    /* Hiệu ứng nền */
+
     body::before {
       content: '';
       position: absolute;
@@ -28,18 +43,18 @@
         radial-gradient(circle at 90% 90%, rgba(37, 117, 252, 0.05) 0%, transparent 20%);
       z-index: -1;
     }
-    
+
     .header {
-      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
-      padding: 20px 15px;
+      padding: 1.5rem 1rem;
       text-align: center;
       border-radius: 0 0 20px 20px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.15);
       position: relative;
       overflow: hidden;
     }
-    
+
     .header::before {
       content: '';
       position: absolute;
@@ -51,10 +66,10 @@
       transform: rotate(15deg);
       z-index: 0;
     }
-    
+
     .header h3 {
       margin: 0;
-      font-size: 20px;
+      font-size: clamp(1.2rem, 5vw, 1.5rem);
       font-weight: 600;
       position: relative;
       z-index: 1;
@@ -63,20 +78,18 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .header h3 span {
-      display: inline-block;
-      margin-right: 8px;
+      margin-right: 0.5rem;
       animation: wave 1.5s infinite;
     }
-    
+
     @keyframes wave {
       0%, 100% { transform: rotate(0); }
       25% { transform: rotate(-10deg); }
       75% { transform: rotate(10deg); }
     }
-    
-    /* LED lights */
+
     .led-container {
       position: absolute;
       top: 0;
@@ -84,10 +97,10 @@
       right: 0;
       display: flex;
       justify-content: space-between;
-      padding: 5px 10px;
+      padding: 0.5rem;
       z-index: 2;
     }
-    
+
     .led {
       width: 8px;
       height: 8px;
@@ -96,19 +109,11 @@
       box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
       animation: ledBlink 3s infinite;
     }
-    
-    .led:nth-child(2n) {
-      animation-delay: 0.5s;
-    }
-    
-    .led:nth-child(3n) {
-      animation-delay: 1s;
-    }
-    
-    .led:nth-child(5n) {
-      animation-delay: 1.5s;
-    }
-    
+
+    .led:nth-child(2n) { animation-delay: 0.5s; }
+    .led:nth-child(3n) { animation-delay: 1s; }
+    .led:nth-child(5n) { animation-delay: 1.5s; }
+
     @keyframes ledBlink {
       0%, 100% { 
         background-color: rgba(255, 255, 255, 0.6);
@@ -119,8 +124,7 @@
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
       }
     }
-    
-    /* Corner LEDs */
+
     .corner-led {
       position: absolute;
       width: 10px;
@@ -128,7 +132,7 @@
       border-radius: 50%;
       z-index: 10;
     }
-    
+
     .corner-led.top-left {
       top: 10px;
       left: 10px;
@@ -136,7 +140,7 @@
       box-shadow: 0 0 8px #ff0000;
       animation: cornerLedBlink 2s infinite;
     }
-    
+
     .corner-led.top-right {
       top: 10px;
       right: 10px;
@@ -144,163 +148,38 @@
       box-shadow: 0 0 8px #00ff00;
       animation: cornerLedBlink 2.5s infinite;
     }
-    
+
     @keyframes cornerLedBlink {
-      0%, 100% { 
-        opacity: 1;
-        box-shadow: 0 0 8px currentColor;
-      }
-      50% { 
-        opacity: 0.5;
-        box-shadow: 0 0 15px currentColor;
-      }
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+      50% { opacity: 0.5; box-shadow: 0 0 15px currentColor; }
     }
-    
+
     .container {
-      padding: 20px;
-      position: relative;
-    }
-    
-    /* Key Activation Section */
-    .key-section {
-      background: white;
-      border-radius: 15px;
-      padding: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .key-section::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, 
-        rgba(106, 17, 203, 0.1), 
-        rgba(37, 117, 252, 0.1),
-        rgba(106, 17, 203, 0.2),
-        rgba(37, 117, 252, 0.1)
-      );
-      transform: rotate(45deg);
-      z-index: 0;
-      animation: gradientFlow 8s linear infinite;
-      opacity: 0.5;
-    }
-    
-    @keyframes gradientFlow {
-      0% { transform: rotate(45deg) translateY(0%); }
-      100% { transform: rotate(45deg) translateY(100%); }
-    }
-    
-    .key-input-group {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .key-label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #2c3e50;
+      padding: 1rem;
+      flex: 1;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: 1rem;
     }
-    
-    .key-label i {
-      margin-right: 8px;
-      color: #6a11cb;
-    }
-    
-    .key-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #e9ecef;
-      border-radius: 10px;
-      font-size: 14px;
-      background-color: #f8f9fa;
-      color: #343a40;
-      transition: all 0.3s ease;
-      margin-bottom: 10px;
-    }
-    
-    .key-input:focus {
-      border-color: #6a11cb;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
-    }
-    
-    .activate-key-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #6a11cb, #2575fc);
-      color: white;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .activate-key-btn i {
-      margin-right: 8px;
-    }
-    
-    .activate-key-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .key-status {
-      font-size: 13px;
-      margin-top: 10px;
-      padding: 8px;
-      border-radius: 6px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    
-    .key-status.error {
-      background-color: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
-    }
-    
-    .key-status.success {
-      background-color: rgba(40, 167, 69, 0.1);
-      color: #28a745;
-    }
-    
-    .key-status.warning {
-      background-color: rgba(255, 193, 7, 0.1);
-      color: #ffc107;
-    }
-    
-    /* Status LEDs */
+
     .status-led-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 15px;
-      padding: 5px;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
       background-color: rgba(0, 0, 0, 0.05);
       border-radius: 20px;
     }
-    
+
     .status-led {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      margin: 0 8px;
+      margin: 0 0.5rem;
       position: relative;
       transition: all 0.3s ease;
     }
-    
+
     .status-led::after {
       content: '';
       position: absolute;
@@ -313,50 +192,28 @@
       filter: blur(2px);
       opacity: 0.7;
     }
-    
-    .status-led.red {
-      background-color: #ccc;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .status-led.yellow {
-      background-color: #ccc;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .status-led.green {
-      background-color: #ccc;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .status-led.active.red {
-      background-color: #ff3b30;
-      box-shadow: 0 0 10px #ff3b30;
-    }
-    
-    .status-led.active.yellow {
-      background-color: #ffcc00;
-      box-shadow: 0 0 10px #ffcc00;
-    }
-    
-    .status-led.active.green {
-      background-color: #34c759;
-      box-shadow: 0 0 10px #34c759;
-    }
-    
+
+    .status-led.red { background-color: #ccc; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+    .status-led.yellow { background-color: #ccc; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+    .status-led.green { background-color: #ccc; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+
+    .status-led.active.red { background-color: #ff3b30; box-shadow: 0 0 10px #ff3b30; }
+    .status-led.active.yellow { background-color: #ffcc00; box-shadow: 0 0 10px #ffcc00; }
+    .status-led.active.green { background-color: #34c759; box-shadow: 0 0 10px #34c759; }
+
     .btn-group {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
     }
-    
+
     .btn {
-      padding: 14px;
+      padding: 0.75rem;
       border: none;
       border-radius: 12px;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
@@ -367,7 +224,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .btn::after {
       content: '';
       position: absolute;
@@ -379,64 +236,32 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    
-    .btn:hover::after {
-      opacity: 1;
-    }
-    
+
+    .btn:hover::after { opacity: 1; }
     .btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
-    
-    .btn:active {
-      transform: translateY(0);
-    }
-    
-    .btn i {
-      margin-right: 8px;
-      font-size: 16px;
-    }
-    
-    /* Tooltip */
-    .btn {
-      --tooltip-text: "Hành động";
-    }
-    
-    #start {
-      background: linear-gradient(45deg, #11998e, #38ef7d);
-      grid-column: span 2;
-      --tooltip-text: "Bắt đầu chạy tiện ích";
-    }
-    
-    #pause {
-      background: linear-gradient(45deg, #f5af19, #f12711);
-      color: white;
-      --tooltip-text: "Tạm dừng thực thi";
-    }
-    
-    #resume {
-      background: linear-gradient(45deg, #0082c8, #0082c8);
-      --tooltip-text: "Tiếp tục sau khi tạm dừng";
-    }
-    
-    #stop {
-      background: linear-gradient(45deg, #ee0979, #ff6a00);
-      grid-column: span 2;
-      --tooltip-text: "Dừng hoàn toàn";
-    }
-    
+
+    .btn:active { transform: translateY(0); }
+    .btn i { margin-right: 0.5rem; font-size: 1rem; }
+
+    #start { background: linear-gradient(45deg, #11998e, #38ef7d); }
+    #pause { background: linear-gradient(45deg, #f5af19, #f12711); }
+    #resume { background: linear-gradient(45deg, #0082c8, #0082c8); }
+    #stop { background: linear-gradient(45deg, #ee0979, #ff6a00); }
+
     .btn::before {
       content: attr(data-tooltip);
       position: absolute;
-      top: -35px;
+      top: -2.5rem;
       left: 50%;
       transform: translateX(-50%);
       background-color: rgba(0,0,0,0.7);
       color: white;
-      padding: 4px 8px;
+      padding: 0.25rem 0.5rem;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 0.75rem;
       opacity: 0;
       visibility: hidden;
       white-space: nowrap;
@@ -444,37 +269,33 @@
       pointer-events: none;
       z-index: 10;
     }
-    
-    .btn:hover::before {
-      opacity: 1;
-      visibility: visible;
-    }
-    
+
+    .btn:hover::before { opacity: 1; visibility: visible; }
+
     .status-card {
-      background-color: white;
+      background-color: var(--card-bg);
       border-radius: 15px;
-      padding: 15px;
-      margin-top: 15px;
+      padding: 1rem;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       display: flex;
       align-items: center;
       transition: all 0.3s ease;
     }
-    
+
     .status-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
-    
+
     .status-indicator {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      margin-right: 12px;
+      margin-right: 0.75rem;
       background-color: #6c757d;
       position: relative;
     }
-    
+
     .status-indicator::after {
       content: '';
       position: absolute;
@@ -487,68 +308,34 @@
       border: 2px solid transparent;
       animation: pulse 1.5s infinite;
     }
-    
+
     @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.3);
-        opacity: 0.5;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    
-    .running {
-      background-color: #28a745;
-      box-shadow: 0 0 8px #28a745;
-    }
-    
-    .running::after {
-      border-color: rgba(40, 167, 69, 0.5);
-    }
-    
-    .paused {
-      background-color: #ffc107;
-      box-shadow: 0 0 8px #ffc107;
-    }
-    
-    .paused::after {
-      border-color: rgba(255, 193, 7, 0.5);
-    }
-    
-    .stopped {
-      background-color: #dc3545;
-      box-shadow: 0 0 8px #dc3545;
-    }
-    
-    .stopped::after {
-      border-color: rgba(220, 53, 69, 0.5);
-      animation: none;
-    }
-    
-    #status {
-      font-weight: 500;
-      font-size: 14px;
-    }
-    
+
+    .running { background-color: #28a745; box-shadow: 0 0 8px #28a745; }
+    .running::after { border-color: rgba(40, 167, 69, 0.5); }
+    .paused { background-color: #ffc107; box-shadow: 0 0 8px #ffc107; }
+    .paused::after { border-color: rgba(255, 193, 7, 0.5); }
+    .stopped { background-color: #dc3545; box-shadow: 0 0 8px #dc3545; }
+    .stopped::after { border-color: rgba(220, 53, 69, 0.5); animation: none; }
+
+    #status { font-weight: 500; font-size: 0.9rem; }
+
     .footer {
-      font-size: 11px;
+      font-size: 0.75rem;
       text-align: center;
-      padding: 15px 10px;
+      padding: 1rem 0.5rem;
       color: #6c757d;
       border-top: 1px solid rgba(0,0,0,0.05);
-      margin-top: 15px;
       background-color: rgba(255,255,255,0.7);
       border-radius: 0 0 10px 10px;
       position: relative;
+      margin-top: auto;
     }
-    
-    /* LED indicator at the bottom */
+
     .led-indicator {
       position: absolute;
       bottom: 5px;
@@ -561,28 +348,31 @@
       animation: ledFlow 3s linear infinite;
       border-radius: 3px;
     }
-    
+
     @keyframes ledFlow {
       0% { background-position: 0% 50%; }
       100% { background-position: 200% 50%; }
     }
-    
-    /* Control section visibility */
-    .controls-section {
-      display: none;
+
+    @media (max-width: 400px) {
+      body { min-width: 280px; }
+      .header { padding: 1rem 0.5rem; }
+      .container { padding: 0.5rem; }
+      .btn-group { grid-template-columns: 1fr; }
+      .btn { padding: 0.6rem; font-size: 0.85rem; }
     }
-    
-    .controls-section.active {
-      display: block;
+
+    @media (min-width: 500px) {
+      body { max-width: 450px; margin: 0 auto; }
+      .container { padding: 1.5rem; }
+      .btn-group { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-  <!-- Corner LEDs -->
   <div class="corner-led top-left"></div>
   <div class="corner-led top-right"></div>
-  
-  <!-- Header with LED lights -->
+
   <div class="header">
     <div class="led-container">
       <div class="led"></div>
@@ -598,50 +388,32 @@
     </div>
     <h3><span>🇯🇵</span> Japanese Profile Clicker</h3>
   </div>
-  
+
   <div class="container">
-    <!-- Key Activation Section -->
-    <div class="key-section" id="key-section">
-      <div class="key-input-group">
-        <label class="key-label">
-          <i class="fas fa-key"></i> Nhập key kích hoạt
-        </label>
-        <input type="text" class="key-input" id="key-input" placeholder="Nhập key để sử dụng tiện ích">
-        <button class="activate-key-btn" id="activate-key-btn">
-          <i class="fas fa-check-circle"></i> Kích hoạt
-        </button>
-        <div class="key-status" id="key-status"></div>
-      </div>
+    <div class="status-led-container">
+      <div class="status-led red active" id="led-red"></div>
+      <div class="status-led yellow" id="led-yellow"></div>
+      <div class="status-led green" id="led-green"></div>
     </div>
-    
-    <!-- Controls Section - Hidden Until Key is Activated -->
-    <div class="controls-section" id="controls-section">
-      <!-- Status LEDs -->
-      <div class="status-led-container">
-        <div class="status-led red" id="led-red"></div>
-        <div class="status-led yellow" id="led-yellow"></div>
-        <div class="status-led green" id="led-green"></div>
-      </div>
-      
-      <div class="btn-group">
-        <button id="start" class="btn" data-tooltip="Bắt đầu chạy tiện ích"><i class="fas fa-play"></i> Bắt đầu</button>
-        <button id="pause" class="btn" data-tooltip="Tạm dừng thực thi"><i class="fas fa-pause"></i> Tạm dừng</button>
-        <button id="resume" class="btn" data-tooltip="Tiếp tục sau khi tạm dừng"><i class="fas fa-sync-alt"></i> Tiếp tục</button>
-        <button id="stop" class="btn" data-tooltip="Dừng hoàn toàn"><i class="fas fa-stop"></i> Dừng</button>
-      </div>
-      
-      <div class="status-card">
-        <div id="status-indicator" class="status-indicator"></div>
-        <div id="status">Trạng thái: chưa chạy</div>
-      </div>
+
+    <div class="btn-group">
+      <button id="start" class="btn" data-tooltip="Bắt đầu chạy tiện ích"><i class="fas fa-play"></i> Bắt đầu</button>
+      <button id="pause" class="btn" data-tooltip="Tạm dừng thực thi"><i class="fas fa-pause"></i> Tạm dừng</button>
+      <button id="resume" class="btn" data-tooltip="Tiếp tục sau khi tạm dừng"><i class="fas fa-sync-alt"></i> Tiếp tục</button>
+      <button id="stop" class="btn" data-tooltip="Dừng hoàn toàn"><i class="fas fa-stop"></i> Dừng</button>
+    </div>
+
+    <div class="status-card">
+      <div id="status-indicator" class="status-indicator stopped"></div>
+      <div id="status">Trạng thái: chưa chạy</div>
     </div>
   </div>
-  
+
   <div class="footer">
     v1.0 - Tiện ích báo cáo tự động
     <div class="led-indicator"></div>
   </div>
-  
+
   <script src="popup.js"></script>
 </body>
 </html>
