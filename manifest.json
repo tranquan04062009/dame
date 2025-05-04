@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Japanese Profile Clicker",
+  "version": "1.0",
+  "description": "Tự động click và báo cáo hồ sơ",
+  "permissions": ["scripting", "activeTab", "notifications", "storage"],
+  "host_permissions": ["<all_urls>", "https://www.tiendeveloper.site/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "32": "icon.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png"
+  }
+}
